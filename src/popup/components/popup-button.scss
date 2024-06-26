@@ -1,0 +1,18 @@
+.popup-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 2px solid white;
+  border-radius: 32px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+  }
+}

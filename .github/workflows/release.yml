@@ -1,0 +1,46 @@
+# copied from https://github.com/fregante/browser-extension-template/blob/main/.github/workflows/release.yml
+name: release
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 20
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Get Version
+        run: |
+          version_tags=$(git tag | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+' | sort -V)
+          latest_version_tag=$(echo "$version_tags" | tail -n 1)
+          latest_version_number=$(echo "$latest_version_tag" | sed 's/^v//')
+          echo "::set-output name=VERSION_NUMBER::$latest_version_number"
+        id: version
+
+      - name: Publish Chrome
+        run: |
+          npm run build
+          npm run version
+          cd distribution
+          npx chrome-webstore-upload-cli upload --auto-publish
+
+        env:
+          EXTENSION_VERSION: ${{ steps.version.outputs.VERSION_NUMBER }}
+          EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          # https://github.com/fregante/chrome-webstore-upload-cli?tab=readme-ov-file
+          CLIENT_ID: ${{ secrets.CHROME_WEBSTORE_API_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_WEBSTORE_API_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_WEBSTORE_API_REFRESH_TOKEN }}

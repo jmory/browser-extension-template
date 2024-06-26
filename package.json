@@ -1,0 +1,57 @@
+{
+  "name": "browser-extension-template",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "webextension-polyfill": "0.12.0"
+  },
+  "devDependencies": {
+    "@parcel/config-webextension": "2.12.0",
+    "@parcel/optimizer-data-url": "2.12.0",
+    "@parcel/transformer-inline-string": "2.12.0",
+    "@parcel/transformer-sass": "^2.12.0",
+    "@stylistic/eslint-plugin": "2.1.0",
+    "@types/eslint": "8.56.10",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "@types/webextension-polyfill": "0.10.7",
+    "@typescript-eslint/eslint-plugin": "7.14.1",
+    "@typescript-eslint/parser": "7.14.1",
+    "chrome-webstore-upload-cli": "3.3.0",
+    "dot-json": "1.3.0",
+    "eslint": "8.57.0",
+    "eslint-plugin-simple-import-sort": "12.1.0",
+    "eslint-plugin-unused-imports": "3.2.0",
+    "happy-dom": "14.12.3",
+    "parcel": "2.12.0",
+    "process": "0.11.10",
+    "stylelint": "16.6.1",
+    "stylelint-config-standard-scss": "13.1.0",
+    "ts-node": "10.9.2",
+    "typescript": "5.5.2",
+    "vitest": "1.6.0"
+  },
+  "scripts": {
+    "build": "npm run build-chrome",
+    "build-chrome": "npm run generate-manifest-chrome && parcel build src/manifest.json --dist-dir distribution --no-content-hash --no-source-maps --no-cache",
+    "build-firefox": "npm run generate-manifest-firefox && parcel build src/manifest.json --dist-dir distribution --no-content-hash --no-source-maps --no-cache",
+    "clean": "rm -rfI ./distribution",
+    "dev": "npm run clean && npm run generate-manifest-chrome && parcel watch src/manifest.json --dist-dir distribution --no-content-hash --no-cache",
+    "eslint": "eslint 'src/**/*.{ts,tsx}'",
+    "eslint-fix": "npm run eslint -- --fix",
+    "generate-manifest-chrome": "node --loader ts-node/esm generate-manifest.ts chrome",
+    "generate-manifest-firefox": "node --loader ts-node/esm generate-manifest.ts firefox",
+    "stylelint": "stylelint \"./src/**/*.scss\"",
+    "stylelint-fix": "npm run stylelint -- --fix",
+    "test": "vitest run",
+    "typecheck": "tsc -p ./tsconfig.json --noEmit",
+    "version": "dot-json distribution/manifest.json version $EXTENSION_VERSION"
+  },
+  "browserslist": [
+    "last 1 Chrome version",
+    "last 1 Firefox version"
+  ]
+}
