@@ -4,6 +4,6 @@ window.addEventListener('load', () => {
     const rootEl = document.querySelector('main')!;
     const root = createRoot(rootEl);
     root.render(
-        <div>Browser Extension Options</div>
+        <div>Options</div>
     );
 });
